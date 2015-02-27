@@ -1,2 +1,2 @@
 # Canvas-Examples
-canvas实例
+本人在学习canvas过程中所涉及的代码实例及注解。

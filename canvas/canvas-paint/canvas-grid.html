@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>grid-canvas</title>
+<style>
+*{margin:0;padding:0;}
+canvas{display:block;background-color:#fff;}
+</style>
+</head>
+<body>
+<canvas id="grid" width="400" height="400"></canvas>
+<script>
+var grid = document.getElementById("grid");
+var cnt = grid.getContext("2d");
+function repaint(){
+	setSize();
+	draw(0.5,0.5,10);
+}
+repaint();
+window.addEventListener("resize",repaint);
+function setSize(){
+	grid.width = window.innerWidth;
+	grid.height = window.innerHeight;
+}
+function draw(startx,starty,step){
+	cnt.lineWidth = 0.5;
+	cnt.strokeStyle="#ccc";
+	for(var i=startx+step;i<grid.width;i+=step){
+		cnt.beginPath();
+		cnt.moveTo(i,0);
+		cnt.lineTo(i,grid.height);
+		cnt.stroke();
+	}
+	for(var i=starty+step;i<grid.height;i+=step){
+		cnt.beginPath();
+		cnt.moveTo(0,i);
+		cnt.lineTo(grid.width,i);
+		cnt.stroke();
+	}
+}
+</script>
+</body>
+</html>
+<!--
+用0.5像素宽的线可以画出很虚的细线
+-->

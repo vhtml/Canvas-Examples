@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas动画</title>
+</head>
+<body>
+<canvas id="myCanvas" width="400" height="300"></canvas>
+<script>
+var canvas = document.getElementById("myCanvas");
+if(canvas.getContext){
+	var ctx = canvas.getContext("2d");
+	// animation(ctx);
+	animation2(canvas,ctx);
+}
+
+function animation(ctx){
+	var posX = 20;
+	var posY = 100;
+	setInterval(function(){
+		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,canvas.width,canvas.height);
+		posX += 1;
+		posY += 0.25;
+		ctx.beginPath();
+		ctx.fillStyle = "white";
+		ctx.arc(posX,posY,10,0,Math.PI*2,true);
+		ctx.closePath();
+		ctx.fill();
+	},30);
+}
+
+function animation2(canvas,ctx){
+	var vx = 10,vy = -10,gravity = 1,posX =  0,posY = 100;
+	setInterval(function(){
+		if(posY>canvas.height-10){
+			vy *= -0.6;
+			vx *= 0.75;
+			posY = canvas.height-10;
+		}
+		if(posX>canvas.width-10){
+			vx *= -0.6;
+			vy *= 0.75;
+			posX = canvas.width-10;
+		}
+		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,canvas.width,canvas.height);
+		ctx.beginPath();
+		ctx.fillStyle = "white";
+		ctx.arc(posX,posY,10,0,Math.PI*2,true);
+		ctx.closePath();
+		ctx.fill();
+		vy += gravity;
+		posX += vx;
+		posY += vy;
+	},30);
+
+}
+</script>
+</body>
+</html>
+<!--
+
+-->

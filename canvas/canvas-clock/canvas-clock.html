@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>时钟</title>
+	<style type="text/css">
+	#clock{margin:0 auto;}
+	</style>
+</head>
+<body>
+<canvas id="clock" width="400" height="400"></canvas>
+<script>
+function Clock(c){
+	this.cv = c.canvas;
+	this.c = c;
+	this.cx = 200;
+	this.cy = 200;
+	this.r = 130;
+	this.hR = 60;
+	this.hr = 10;
+	this.mR = 90;
+	this.mr = 20;
+	this.sR = 120;
+	this.sr = 30;
+	this.init();
+}
+Clock.prototype.init = function(){
+	var _this = this;
+	_this.drawClock();
+	setInterval(function(){
+		_this.clear();
+		_this.drawClock();
+	},1000);
+}
+Clock.prototype.clear = function(){
+	this.c.clearRect(0,0,this.cv.width,this.cv.height);
+}
+Clock.prototype.drawClock = function(){
+	this.drawDial();
+	this.drawPointer();
+}
+Clock.prototype.drawDial = function(){
+	var c = this.c;
+	c.beginPath();
+	c.arc(this.cx,this.cy,this.r,0,Math.PI*2,true);
+	c.lineWidth = 6;
+	c.strokeStyle = "#f90";
+	c.stroke();
+	var inR = this.r - 10;
+	var x0 = 0, y0 = 0, x1=0,y1=0,angle = 1/30*Math.PI;
+	c.strokeStyle = "rgb(132, 197, 36)";
+	c.lineWidth = 2.0;
+	for(var i=0;i<60;i++){
+		c.beginPath();
+		x0 = this.cx + inR*Math.sin(angle*i);
+		y0 = this.cy - inR*Math.cos(angle*i);
+		if(i%5){
+			x1 = this.cx + (inR-5)*Math.sin(angle*i);
+			y1 = this.cy - (inR-5)*Math.cos(angle*i);
+		}else{
+			x1 = this.cx + (inR-15)*Math.sin(angle*i);
+			y1 = this.cy - (inR-15)*Math.cos(angle*i);
+		}
+		c.moveTo(x0,y0);
+		c.lineTo(x1,y1);
+		c.stroke();
+	}
+	c.stroke();
+	var numR = this.r - 45;
+	var angleNum = 1/6*Math.PI;
+	var xn = 0,yn=0;
+	c.fillStyle = "orange";
+	c.font = "24px Verdana";
+	c.textAlign = "center";
+	c.textBaseline = "middle";
+	for(var i=1;i<=12;i++){
+		xn = this.cx + numR*Math.sin(angleNum*i);
+		yn = this.cy - numR*Math.cos(angleNum*i);
+		c.fillText(i,xn,yn);
+	}
+	c.stroke();
+}
+Clock.prototype.drawPointer = function(date){
+	var c = this.c;
+	var d = new Date();
+	var h = d.getHours(),m = d.getMinutes(),s = d.getSeconds(),ms = d.getMilliseconds();
+	var sAngle = s/60*2*Math.PI;
+	var mAngle = m/60*2*Math.PI+sAngle/60;
+	var hAngle = (h%12)/12*2*Math.PI+mAngle/12;
+	var sX0 = this.cx - this.sr*Math.sin(sAngle);
+	var sY0 = this.cy + this.sr*Math.cos(sAngle);
+	var sX1 = this.cx + this.sR*Math.sin(sAngle);
+	var sY1 = this.cy - this.sR*Math.cos(sAngle);
+	var mX0 = this.cx - this.mr*Math.sin(mAngle);
+	var mY0 = this.cy + this.mr*Math.cos(mAngle);
+	var mX1 = this.cx + this.mR*Math.sin(mAngle);
+	var mY1 = this.cy - this.mR*Math.cos(mAngle);
+	var hX0 = this.cx - this.hr*Math.sin(hAngle);
+	var hY0 = this.cy + this.hr*Math.cos(hAngle);
+	var hX1 = this.cx + this.hR*Math.sin(hAngle);
+	var hY1 = this.cy - this.hR*Math.cos(hAngle);
+	c.beginPath();
+	c.moveTo(sX0,sY0);
+	c.lineTo(sX1,sY1);
+	c.strokeStyle = "#c00";
+	c.lineWidth = 2.0;
+	c.stroke();
+	c.beginPath();
+	c.moveTo(mX0,mY0);
+	c.lineTo(mX1,mY1);
+	c.strokeStyle = "#00c";
+	c.lineWidth = 3.0;
+	c.stroke();
+	c.beginPath();
+	c.moveTo(hX0,hY0);
+	c.lineTo(hX1,hY1);
+	c.strokeStyle = "#400";
+	c.lineWidth = 4.0;
+	c.stroke();
+
+}
+
+var cv = document.getElementById("clock");
+if(cv.getContext){
+	var ctx = cv.getContext("2d");
+	new Clock(ctx);
+}
+</script>
+</body>
+</html>
